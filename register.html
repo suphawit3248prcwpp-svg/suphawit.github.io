@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>สมัครสมาชิก</title>
+  <style>
+    :root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#9ca3af; --accent:#2563eb; --accent-press:#1d4ed8; --danger:#ef4444; }
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#0b1020,#0f172a);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"TH Sarabun New",sans-serif;color:var(--text);min-height:100dvh;display:grid;place-items:center;padding:24px}
+    .card{width:100%;max-width:420px;background:linear-gradient(180deg,var(--card),#0f172a);border:1px solid #1f2937;border-radius:20px;padding:28px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    h1{margin:0 0 6px;font-size:1.6rem;font-weight:700}
+    p.caption{margin:0 0 20px;color:var(--muted);font-size:.95rem}
+    label{display:block;font-weight:600;margin:12px 0 6px}
+    .input{width:100%;padding:12px 14px;border:1px solid #273244;background:#0b1220;color:var(--text);border-radius:12px;font-size:1rem;outline:none;transition:border .15s ease, box-shadow .15s ease}
+    .input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.15)}
+    .row{position:relative}
+    .toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:var(--muted);cursor:pointer;padding:6px 8px;border-radius:8px}
+    .toggle:focus{outline:2px solid rgba(37,99,235,.4)}
+    .btn{margin-top:18px;width:100%;padding:12px 16px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;font-size:1rem;cursor:pointer;transition:transform .02s ease, background .15s ease, box-shadow .15s ease;box-shadow:0 6px 18px rgba(37,99,235,.35)}
+    .btn:hover{background:var(--accent-press)}
+    .btn:active{transform:translateY(1px)}
+    .error{color:var(--danger);font-size:.9rem;margin-top:8px;display:none}
+    .hint{color:var(--muted);font-size:.85rem;margin-top:6px}
+  </style>
+</head>
+<body>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title">สมัครสมาชิก</h1>
+    <p class="caption">กรอกข้อมูลเพื่อสร้างบัญชีใหม่</p>
+
+    <form action="register.php" method="post" novalidate id="signupForm">
+      <label for="full_name">ชื่อ-นามสกุล</label>
+      <input class="input" type="text" id="full_name" name="full_name" placeholder="เช่น กิตติพงษ์ ใจดี" autocomplete="name" required />
+
+      <label for="email">อีเมล</label>
+      <input class="input" type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" inputmode="email" required />
+
+      <label for="password">รหัสผ่าน</label>
+      <div class="row">
+        <input class="input" type="password" id="password" name="password" placeholder="อย่างน้อย 8 ตัวอักษร" autocomplete="new-password" minlength="8" required />
+        <button type="button" class="toggle" aria-label="แสดง/ซ่อนรหัสผ่าน" id="togglePw">แสดง</button>
+      </div>
+      <div class="hint">ควรมีตัวอักษรพิมพ์ใหญ่ เล็ก และตัวเลขผสมกัน</div>
+
+      <div id="formError" class="error">กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง</div>
+
+      <button class="btn" type="submit">ส่งข้อมูล</button>
+    </form>
+  </main>
+
+  <script>
+  
+    const pw = document.getElementById('password');
+    const toggle = document.getElementById('togglePw');
+    toggle.addEventListener('click', () => {
+      const isHidden = pw.type === 'password';
+      pw.type = isHidden ? 'text' : 'password';
+      toggle.textContent = isHidden ? 'ซ่อน' : 'แสดง';
+    });
+
+    
+    const form = document.getElementById('signupForm');
+    const errorBox = document.getElementById('formError');
+
+    form.addEventListener('submit', (e) => {
+      errorBox.style.display = 'none';
+
+     
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        errorBox.textContent = 'กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+     
+      const value = pw.value;
+      const strongEnough = value.length >= 8;
+      if (!strongEnough) {
+        e.preventDefault();
+        errorBox.textContent = 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร';
+        errorBox.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
